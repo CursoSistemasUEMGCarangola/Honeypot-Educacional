@@ -75,12 +75,17 @@ export default function Confirmacao() {
         </section>
 
         {/* Secondary Info Cards (Bento Style) */}
-        <section className="w-full max-w-container-max mx-auto px-gutter mt-xl grid grid-cols-1 md:grid-cols-2 gap-md">
+        <section className="w-full max-w-container-max mx-auto px-gutter mt-xl grid grid-cols-1 md:grid-cols-3 gap-md">
           <ShareCard />
-          <div className="bg-primary-container border-2 border-blue-900 p-md flex flex-col gap-sm">
+          <div className="bg-primary-container border-2 border-blue-900 p-md flex flex-col gap-sm hover:shadow-[8px_8px_0px_0px_rgba(0,110,39,1)] transition-all">
             <span className="material-symbols-outlined text-blue-900 text-4xl">calendar_month</span>
-            <h4 className="font-headline-md text-headline-md uppercase italic text-blue-900">Grande Sorteio</h4>
-            <p className="font-body-md text-body-md">O anúncio do vencedor será realizado ao vivo em nossas redes sociais em breve.</p>
+            <h4 className="font-black italic uppercase text-xl text-blue-900 leading-tight">Grande Sorteio</h4>
+            <p className="font-body-md text-body-md text-blue-900/80">O anúncio do vencedor será realizado ao vivo em nossas redes sociais em breve.</p>
+          </div>
+          <div className="bg-secondary-container border-2 border-blue-900 p-md flex flex-col gap-sm hover:shadow-[8px_8px_0px_0px_rgba(0,110,39,1)] transition-all">
+            <span className="material-symbols-outlined text-blue-900 text-4xl">bolt</span>
+            <h4 className="font-black italic uppercase text-xl text-blue-900 leading-tight">AUMENTE SUAS CHANCES</h4>
+            <p className="font-body-md text-body-md text-blue-900/80">Participe quantas vezes quiser e multiplique suas chances de ganhar!</p>
           </div>
         </section>
       </main>

@@ -70,5 +70,7 @@ Este roadmap define as fases incrementais para a construção do projeto, respei
 [x] **Tratamento de Erros:** Revisão de try/catch e tratamento de 403 dinâmico.
 [x] **Deploy Vercel:** Configuração pronta para Vercel via Git.
 [x] **Limpeza de Logs:** Verificado descarte de PII no cliente para logs limpos.
+[x] **Melhoria UX Confirmação:** Adicionado card informativo "AUMENTE SUAS CHANCES".
+[x] **Gestão de Dados Admin:** Implementada funcionalidade de zerar métricas da campanha ativa.
 
-**📍 Definição de Pronto (DoD):** Sistema em produção, QR Code testado e roadmap 100% concluído.
+**📍 Definição de Pronto (DoD):** Sistema em produção, QR Code testado e roadmap 100% concluído com funcionalidades extras de gestão e UX.

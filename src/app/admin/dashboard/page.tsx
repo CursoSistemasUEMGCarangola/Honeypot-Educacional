@@ -177,6 +177,24 @@ export default function DashboardPage() {
     }
   };
 
+  const handleResetMetricas = async () => {
+    if (!confirm("⚠️ ATENÇÃO: Esta ação irá apagar permanentemente todas as submissões da campanha atual. Deseja continuar?")) return;
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/admin/metricas", { method: "DELETE" });
+      if (res.ok) {
+        await fetchAll();
+      } else {
+        const data = await res.json();
+        alert(`Erro ao zerar métricas: ${data.error}`);
+      }
+    } catch (err) {
+      console.error("Reset Error:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary-600"></div>
@@ -225,6 +243,14 @@ export default function DashboardPage() {
               <div className="flex flex-col justify-center gap-2">
                 <span className="text-[9px] font-black text-primary-500 uppercase tracking-[0.3em]">Campanha em Vigor</span>
                 <h2 className="text-4xl font-black text-slate-900 leading-none">{data?.campanha}</h2>
+                <button 
+                  onClick={handleResetMetricas}
+                  disabled={isSubmitting || !data?.totalGeral || data.totalGeral === 0}
+                  className="mt-4 w-fit flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-red-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-red-100"
+                >
+                  <span className="material-symbols-outlined text-sm">delete_sweep</span>
+                  Zerar Métricas da Campanha
+                </button>
               </div>
               <div className="bg-slate-900 p-8 rounded-[40px] text-white flex flex-col items-end">
                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Total de Capturas</span>

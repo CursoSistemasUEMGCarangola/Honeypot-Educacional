@@ -60,3 +60,8 @@ Use estas tags para categorizar novas entradas, facilitando a busca semântica:
 **Sintoma/Contexto:** Botão de "Criar Campanha" não disparava a API, resultando em "nada acontece".
 **Causa Raiz:** O botão dentro do formulário não tinha `type="submit"` explícito e a validação do Zod no handler estava abortando a submissão silenciosamente por campos vazios.
 **Solução Aplicada:** Adicionado `type="submit"` e logs de alerta (`console.warn`) no frontend para detectar falhas de validação visualmente no console (F12).
+### [2026-05-06] - [LIB] Conflito de Classes de Fonte e Visibilidade no Tailwind
+
+**Sintoma/Contexto:** Títulos de cards na página de confirmação (usando `h4` com `font-headline-md`) estavam invisíveis ou com renderização inconsistente em alguns navegadores/ambientes.
+**Causa Raiz:** O projeto possui definições duplicadas em `tailwind.config.ts` (na categoria `fontFamily` e em `extend.colors` - embora no caso tenha sido no `extend` de fontes/tamanhos). O uso de `text-headline-md` (32px) aliado a line-heights customizados e a falta de herança clara de cores estava "quebrando" a renderização em grids densos.
+**Solução Aplicada:** Migração para classes padrão do Tailwind (`text-xl`, `font-black`) para garantir robustez e consistência visual. Reforçado o uso de `leading-tight` para títulos em cards compactos.

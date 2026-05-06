@@ -33,8 +33,8 @@ export default function ShareCard() {
         <span className="material-symbols-outlined text-9xl">share</span>
       </div>
       <span className="material-symbols-outlined text-primary-fixed text-4xl relative z-10">share</span>
-      <h4 className="font-headline-md text-headline-md uppercase italic relative z-10">Convide Amigos</h4>
-      <p className="font-body-md text-body-md relative z-10">Compartilhe e ganhe chances extras para cada amigo que se inscrever!</p>
+      <h4 className="font-black italic uppercase text-xl relative z-10 leading-tight">Convide Amigos</h4>
+      <p className="font-body-md text-body-md relative z-10 opacity-90">Compartilhe e ganhe chances extras para cada amigo que se inscrever!</p>
     </div>
   );
 }

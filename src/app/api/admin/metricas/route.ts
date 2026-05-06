@@ -66,3 +66,35 @@ export async function GET() {
     return NextResponse.json({ error: "Falha ao processar métricas agregadas." }, { status: 500 });
   }
 }
+
+export async function DELETE() {
+  try {
+    // 1. Buscar a campanha ativa
+    const { data: campanhaAtiva, error: campError } = await supabase
+      .from("campanhas")
+      .select("id")
+      .eq("ativa", true)
+      .maybeSingle();
+
+    if (campError) throw campError;
+    if (!campanhaAtiva) {
+      return NextResponse.json({ error: "Nenhuma campanha ativa encontrada para zerar." }, { status: 404 });
+    }
+
+    // 2. Deletar todas as submissões desta campanha
+    const { error: deleteError } = await supabase
+      .from("submissoes")
+      .delete()
+      .eq("campanha_id", campanhaAtiva.id);
+
+    if (deleteError) throw deleteError;
+
+    return NextResponse.json({ 
+      success: true, 
+      message: "Métricas da campanha atual foram zeradas com sucesso." 
+    });
+  } catch (err) {
+    console.error("Admin Reset Error:", err);
+    return NextResponse.json({ error: "Falha ao zerar métricas da campanha." }, { status: 500 });
+  }
+}
