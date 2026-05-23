@@ -21,7 +21,7 @@ export default function ResultadosLandingPage({
 }: ResultadosLandingPageProps) {
   const [data, setData] = useState({ totalGeral: initialTotal, metricas: initialMetricas });
   const [loading, setLoading] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Função para recarregar dados manualmente
@@ -46,8 +46,18 @@ export default function ResultadosLandingPage({
   // Efeito para garantir que o vídeo comece a rodar imediatamente
   useEffect(() => {
     if (videoRef.current) {
+      // Tentar iniciar com som
+      videoRef.current.muted = false;
       videoRef.current.play().catch((err) => {
-        console.warn("Autoplay bloqueado ou falhou:", err);
+        console.warn("Autoplay com som bloqueado, tentando com mudo:", err);
+        // Fallback: se falhar, muta o vídeo e tenta dar play novamente
+        if (videoRef.current) {
+          videoRef.current.muted = true;
+          setMuted(true);
+          videoRef.current.play().catch((playErr) => {
+            console.error("Falha no autoplay mudo:", playErr);
+          });
+        }
       });
     }
   }, []);
