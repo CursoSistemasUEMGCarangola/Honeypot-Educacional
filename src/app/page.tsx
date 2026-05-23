@@ -1,7 +1,48 @@
+import { supabase } from "@/lib/supabase";
+import ResultadosLandingPage from "@/components/ResultadosLandingPage";
 import FormularioIsca from "@/components/FormularioIsca";
 import CountdownTimer from "@/components/CountdownTimer";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  // 1. Buscar a campanha ativa
+  const { data: campanhaAtiva } = await supabase
+    .from("campanhas")
+    .select("id, nome_campanha, ativa, exibir_resultados")
+    .eq("ativa", true)
+    .maybeSingle();
+
+  // 2. Se a campanha ativa estiver configurada para exibir resultados, renderizar a ResultadosLandingPage
+  if (campanhaAtiva?.exibir_resultados) {
+    // Buscar submissões da campanha ativa
+    const { data: submissoes } = await supabase
+      .from("submissoes")
+      .select("curso_id")
+      .eq("campanha_id", campanhaAtiva.id);
+
+    // Buscar nomes dos cursos
+    const { data: cursos } = await supabase
+      .from("cursos")
+      .select("id, nome_curso");
+
+    // Agregação das métricas por curso
+    const stats = (cursos || []).map(curso => ({
+      id: curso.id,
+      nome: curso.nome_curso,
+      cliques: (submissoes || []).filter(s => Number(s.curso_id) === Number(curso.id)).length
+    })).sort((a, b) => b.cliques - a.cliques);
+
+    return (
+      <ResultadosLandingPage
+        campanha={campanhaAtiva.nome_campanha}
+        totalGeral={submissoes?.length || 0}
+        metricas={stats}
+      />
+    );
+  }
+
+  // Caso contrário, exibir a Landing Page com o Formulário Isca original
   return (
     <div className="bg-primary-container min-h-screen font-body-md text-on-background selection:bg-secondary selection:text-white pb-20">
       {/* TopAppBar */}
@@ -59,7 +100,7 @@ export default function Home() {
                 <span className="material-symbols-outlined text-9xl">verified</span>
               </div>
               <h4 className="font-headline-md text-2xl text-on-tertiary-container mb-xs uppercase">Original</h4>
-              <p className="font-body-md text-on-tertiary-container/80">Produto oficial licenciado com selo de autenticidade.</p>
+              <p className="font-body-md text-on-tertiary-container/80">Produto oficial licensed com selo de autenticidade.</p>
             </div>
             <div className="bg-secondary-container p-lg border-2 border-secondary rounded-xl relative overflow-hidden group">
               <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform">

@@ -12,7 +12,7 @@ export async function GET() {
     // 1. Buscar a campanha ativa
     const { data: campanhaAtiva, error: campError } = await supabase
       .from("campanhas")
-      .select("id, nome_campanha")
+      .select("id, nome_campanha, exibir_resultados")
       .eq("ativa", true)
       .maybeSingle();
 
@@ -52,6 +52,8 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       campanha: campanhaAtiva.nome_campanha,
+      campanhaId: campanhaAtiva.id,
+      exibirResultados: campanhaAtiva.exibir_resultados || false,
       totalGeral: submissoes?.length || 0,
       metricas: stats
     }, {

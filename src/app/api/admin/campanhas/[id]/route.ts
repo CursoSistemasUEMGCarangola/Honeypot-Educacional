@@ -6,6 +6,7 @@ const campanhaSchema = z.object({
   nome_campanha: z.string().min(3, "O nome da campanha deve ter pelo menos 3 caracteres.").max(100),
   descricao: z.string().optional(),
   ativa: z.boolean().default(false),
+  exibir_resultados: z.boolean().optional().default(false),
 });
 
 export const dynamic = "force-dynamic";
@@ -28,7 +29,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       .update({
         nome_campanha: validatedData.nome_campanha,
         descricao: validatedData.descricao,
-        ativa: validatedData.ativa
+        ativa: validatedData.ativa,
+        exibir_resultados: validatedData.exibir_resultados
       })
       .eq("id", params.id)
       .select()

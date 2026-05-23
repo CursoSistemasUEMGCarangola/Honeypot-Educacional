@@ -12,7 +12,8 @@ CREATE TABLE campanhas (
     nome_campanha VARCHAR(100) NOT NULL, -- Ex: 'Wi-Fi Campus 5G'
     descricao TEXT,
     data_inicio TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    ativa BOOLEAN DEFAULT TRUE
+    ativa BOOLEAN DEFAULT TRUE,
+    exibir_resultados BOOLEAN DEFAULT FALSE
 );
 
 -- 3. TABELA DE CURSOS (Para padronizar a entrada e geração de métricas)

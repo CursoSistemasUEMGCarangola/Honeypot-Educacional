@@ -13,6 +13,8 @@ interface Metric {
 
 interface DashboardData {
   campanha: string;
+  campanhaId?: number;
+  exibirResultados?: boolean;
   totalGeral: number;
   metricas: Metric[];
 }
@@ -22,6 +24,7 @@ interface Campanha {
   nome_campanha: string;
   descricao?: string;
   ativa: boolean;
+  exibir_resultados?: boolean;
 }
 
 interface Curso {
@@ -155,7 +158,9 @@ export default function DashboardPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
         nome_campanha: target.nome_campanha,
-        ativa: true 
+        descricao: target.descricao || "",
+        ativa: true,
+        exibir_resultados: target.exibir_resultados || false
       }),
     });
     if (res.ok) {
@@ -190,6 +195,38 @@ export default function DashboardPage() {
       }
     } catch (err) {
       console.error("Reset Error:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleToggleExibirResultados = async () => {
+    if (!data?.campanhaId || isSubmitting) return;
+    setIsSubmitting(true);
+    const newValue = !data.exibirResultados;
+    try {
+      const activeCamp = campanhas.find(c => c.id === data.campanhaId);
+      if (!activeCamp) return;
+
+      const res = await fetch(`/api/admin/campanhas/${data.campanhaId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome_campanha: activeCamp.nome_campanha,
+          descricao: activeCamp.descricao || "",
+          ativa: activeCamp.ativa,
+          exibir_resultados: newValue
+        }),
+      });
+
+      if (res.ok) {
+        await fetchAll();
+      } else {
+        const errData = await res.json();
+        alert(`Erro ao salvar configuração: ${errData.error}`);
+      }
+    } catch (err) {
+      console.error(err);
     } finally {
       setIsSubmitting(false);
     }
@@ -243,6 +280,19 @@ export default function DashboardPage() {
               <div className="flex flex-col justify-center gap-2">
                 <span className="text-[9px] font-black text-primary-500 uppercase tracking-[0.3em]">Campanha em Vigor</span>
                 <h2 className="text-4xl font-black text-slate-900 leading-none">{data?.campanha}</h2>
+                <div className="mt-4 flex items-center gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 w-full max-w-sm">
+                  <input 
+                    type="checkbox"
+                    id="exibir-resultados"
+                    checked={data?.exibirResultados || false}
+                    onChange={handleToggleExibirResultados}
+                    disabled={isSubmitting || !data?.campanhaId}
+                    className="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500 cursor-pointer"
+                  />
+                  <label htmlFor="exibir-resultados" className="text-[10px] font-black text-slate-700 uppercase tracking-wider cursor-pointer select-none">
+                    Exibir Resultados na Página Inicial
+                  </label>
+                </div>
                 <button 
                   onClick={handleResetMetricas}
                   disabled={isSubmitting || !data?.totalGeral || data.totalGeral === 0}
