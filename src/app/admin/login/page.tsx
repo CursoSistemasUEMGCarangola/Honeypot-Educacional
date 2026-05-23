@@ -8,14 +8,24 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Autenticação mock baseada em cookie para ativação do Middleware
-    if (password === "uemg2024") {
-      document.cookie = "admin_auth=true; path=/; max-age=3600";
-      router.push("/admin/dashboard");
-    } else {
-      setError("Senha administrativa incorreta.");
+    setError("");
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      if (res.ok) {
+        router.push("/admin/dashboard");
+      } else {
+        const data = await res.json();
+        setError(data.error || "Senha administrativa incorreta.");
+      }
+    } catch (err) {
+      setError("Erro ao conectar com o servidor.");
     }
   };
 
