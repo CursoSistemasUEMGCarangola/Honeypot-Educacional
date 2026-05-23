@@ -32,9 +32,9 @@ CREATE TABLE submissoes (
 
 -- 5. INSERIR CURSOS PADRÃO DA UEMG
 INSERT INTO cursos (nome_curso) VALUES 
-('Administração'), ('Design de Produto'), ('Direito'), 
-('Engenharia de Computação'), ('Medicina'), ('Pedagogia'), 
-('Psicologia'), ('Sistemas de Informação');
+('Administração'), ('Ciências Biológicas'), ('Geografia'), 
+('História'), ('Letras'), ('Matemática'), ('Pedagogia'),
+('Serviço Social'), ('Sistemas de Informação');
 
 -- 6. CONFIGURAR SEGURANÇA (RLS)
 -- Garante que o sistema funcione com chaves anônimas (anon_key) com segurança.
