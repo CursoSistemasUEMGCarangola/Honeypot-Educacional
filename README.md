@@ -50,57 +50,6 @@ Ao executar uma simulação em sua instituição:
 
 3. A página de conscientização pós-clique deve sempre estar ativa, clara e conter os contatos dos responsáveis pela disciplina.
 
-## 🪐 Integração com Gemini Pro
-
-Este projeto agora inclui uma rota servidor `POST /api/gemini` que faz chamada ao Gemini Pro via API do Google.
-
-### Como configurar
-
-1. Crie um projeto no Google Cloud.
-2. Ative a API `Generative Language API` ou `Vertex AI`.
-3. Crie uma Service Account com permissão para o Cloud Platform e baixe a chave JSON.
-4. Defina a variável de ambiente `GOOGLE_APPLICATION_CREDENTIALS` apontando para o arquivo JSON:
-
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS="/caminho/para/key.json"
-```
-
-No Windows PowerShell:
-
-```powershell
-$env:GOOGLE_APPLICATION_CREDENTIALS = "C:\caminho\para\key.json"
-```
-
-5. (Opcional) Ajuste o modelo com `GEMINI_MODEL_NAME`, por exemplo `gemini-pro`.
-
-### Como usar
-
-Faça uma requisição POST para `/api/gemini` com JSON:
-
-```json
-{
-  "prompt": "Explique em poucas linhas como usar o Gemini Pro em português."
-}
-```
-
-Exemplo em JavaScript:
-
-```js
-const response = await fetch('/api/gemini', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ prompt: 'Escreva um resumo curto sobre educação.' }),
-});
-const result = await response.json();
-console.log(result);
-```
-
-### Observações importantes
-
-- A chave do Google não deve ser exposta no front-end.
-- Use a rota somente no servidor (API route do Next.js).
-- Monitore custos no Google Cloud Console.
-
 ## 📄 Licença
 
 Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
